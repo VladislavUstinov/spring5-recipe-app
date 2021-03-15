@@ -31,4 +31,10 @@ public class UnitOfMeasure {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public UnitOfMeasure(){}
+
+    public UnitOfMeasure(String description) {
+        this.description = description;
+    }
 }
