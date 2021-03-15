@@ -106,10 +106,10 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         // adding categories
 
 
-        categoryAmerican.getRecipes().add (recipeGuacomole);
-        categoryAmerican.getRecipes().add (recipeChicken);
+        //categoryAmerican.getRecipes().add (recipeGuacomole);
+        //categoryAmerican.getRecipes().add (recipeChicken);
 
-        categoryMexican.getRecipes().add (recipeGuacomole);
+        //categoryMexican.getRecipes().add (recipeGuacomole);
 
         recipeGuacomole.getCategories().add(categoryAmerican);
         recipeGuacomole.getCategories().add(categoryMexican);
