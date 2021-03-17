@@ -1,5 +1,8 @@
 package guru.springframework.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -7,21 +10,31 @@ import java.util.Objects;
 /**
  * Created by jt on 6/13/17.
  */
+@Getter
+@Setter
 @Entity
+@Table(name = "ingredients")
 public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="description")
     private String description;
+
+    @Column (name = "amount")
     private BigDecimal amount;
 
+    //мб лучше ManyToOne?
     @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure uom;
 
     @ManyToOne
+    @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
+    //когда все-таки нужно переопределять equals через id?
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,44 +56,4 @@ public class Ingredient {
         this.uom = uom;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public UnitOfMeasure getUom() {
-        return uom;
-    }
-
-    public void setUom(UnitOfMeasure uom) {
-        this.uom = uom;
-    }
 }

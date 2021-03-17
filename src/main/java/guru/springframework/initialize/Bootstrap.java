@@ -1,20 +1,19 @@
 package guru.springframework.initialize;
 
 import guru.springframework.domain.*;
-import guru.springframework.repositories.CategoryRepository;
-import guru.springframework.repositories.NotesRepository;
-import guru.springframework.repositories.RecipeRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
-import org.springframework.boot.CommandLineRunner;
+import guru.springframework.repositories.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
 //import src/main/resources/data.sql;
 
+@Slf4j
 @Component
 public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -26,11 +25,14 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
 
-    public Bootstrap(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository, NotesRepository notesRepository, CategoryRepository categoryRepository) {
+    private final IngredientRepository ingredientRepository;
+
+    public Bootstrap(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository, NotesRepository notesRepository, CategoryRepository categoryRepository, IngredientRepository ingredientRepository) {
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.notesRepository = notesRepository;
         this.categoryRepository = categoryRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
 /*    @Override
@@ -39,7 +41,9 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
     }*/
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+
 
                     //load UnitOfMeasures from data.sql
 
@@ -69,7 +73,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
                     //Guacomole Recipe:
 
         Ingredient ingredientAvocado = new Ingredient("avocado", new BigDecimal(2.0), uomPieces);
-        Ingredient ingredientLemon = new Ingredient("lemon", new BigDecimal(0.5), uomPieces);
+        Ingredient ingredientLemon = new Ingredient("lemon", new BigDecimal(1.0), uomPieces);
 
         Recipe recipeGuacomole = new Recipe();
         Set<Ingredient> ingredientsGuacomole = new HashSet<>();
@@ -80,27 +84,32 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         recipeGuacomole.setIngredients(ingredientsGuacomole);
         recipeGuacomole.setDescription("Guacomole");
 
+        ingredientAvocado.setRecipe(recipeGuacomole);
+        ingredientLemon.setRecipe(recipeGuacomole);
+
         Notes notesGuacomole = new Notes();
         notesGuacomole.setRecipeNotes("Some notes");
-        notesGuacomole.setRecipe(recipeGuacomole);
+        //notesGuacomole.setRecipe(recipeGuacomole);
         recipeGuacomole.setNotes(notesGuacomole);
+
+     //   ingredientRepository.saveAll(ingredientsGuacomole);
 
         //Chicken Recipe:
         Ingredient ingredientChicken = new Ingredient("chicken", new BigDecimal(1.0), uomPieces);
-        Ingredient ingredientLemon2 = new Ingredient("lemon", new BigDecimal(1.5), uomPieces);
+        Ingredient ingredientLemon2 = new Ingredient("chicken2", new BigDecimal(1.0), uomPieces);
+                //new Ingredient("lemon", new BigDecimal(2.0), uomPieces);
 
         Recipe recipeChicken = new Recipe();
-        Set<Ingredient> ingredientsChicken = new HashSet<>();
 
-        ingredientsChicken.add(ingredientChicken);
-        ingredientsChicken.add(ingredientLemon2);
-
-        recipeChicken.setIngredients(ingredientsChicken);
+        recipeChicken.addIngredient(ingredientChicken);
+        recipeChicken.addIngredient(ingredientLemon2);
         recipeChicken.setDescription("Chicken");
+
+
 
         Notes notesChicken = new Notes();
         notesChicken.setRecipeNotes("Some notes 2");
-        notesChicken.setRecipe(recipeChicken);
+        //notesChicken.setRecipe(recipeChicken);
         recipeChicken.setNotes(notesChicken);
 
         // adding categories
@@ -116,7 +125,22 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
         recipeChicken.getCategories().add(categoryAmerican);
 
+
+
         recipeRepository.save(recipeGuacomole);
         recipeRepository.save(recipeChicken);
+
+
+        System.out.println( "log.isDebugEnabled()" + log.isDebugEnabled());
+        log.info("MY INFO EXAMPLE");
+        log.debug("MY DEBUG EXAMPLE - bootstrapping data ended");
+
+
+/*
+//example of builder in category
+        Category category = new Category().builder().description("Russian").id(111l).build();
+        log.debug("category.getDescription()=" + category.getDescription() + " ; id = " + category.getId());
+
+ */
     }
 }

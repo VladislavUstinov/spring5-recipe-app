@@ -1,12 +1,20 @@
 package guru.springframework.domain;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by jt on 6/13/17.
  */
+@Builder
+@Setter
+@Getter
+@EqualsAndHashCode(exclude = {"recipes"})
 @Entity
 public class Category {
 
@@ -18,30 +26,13 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private Set<Recipe> recipes;
 
-
     public Category () {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public Category(Long id, String description, Set<Recipe> recipes) {
         this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Set<Recipe> getRecipes() {
-        return recipes;
-    }
-
-    public void setRecipes(Set<Recipe> recipes) {
         this.recipes = recipes;
     }
+
+
 }
