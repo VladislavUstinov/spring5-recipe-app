@@ -78,14 +78,10 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Recipe recipeGuacomole = new Recipe();
         Set<Ingredient> ingredientsGuacomole = new HashSet<>();
 
-        ingredientsGuacomole.add(ingredientAvocado);
-        ingredientsGuacomole.add(ingredientLemon);
+        recipeGuacomole.addIngredient(ingredientAvocado);
+        recipeGuacomole.addIngredient(ingredientLemon);
 
-        recipeGuacomole.setIngredients(ingredientsGuacomole);
         recipeGuacomole.setDescription("Guacomole");
-
-        ingredientAvocado.setRecipe(recipeGuacomole);
-        ingredientLemon.setRecipe(recipeGuacomole);
 
         Notes notesGuacomole = new Notes();
         notesGuacomole.setRecipeNotes("Some notes");
@@ -96,16 +92,14 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
         //Chicken Recipe:
         Ingredient ingredientChicken = new Ingredient("chicken", new BigDecimal(1.0), uomPieces);
-        Ingredient ingredientLemon2 = new Ingredient("chicken2", new BigDecimal(1.0), uomPieces);
-                //new Ingredient("lemon", new BigDecimal(2.0), uomPieces);
+        Ingredient ingredientLemon2 = new Ingredient("lemon", new BigDecimal(1.0), uomPieces);
 
         Recipe recipeChicken = new Recipe();
 
         recipeChicken.addIngredient(ingredientChicken);
         recipeChicken.addIngredient(ingredientLemon2);
+
         recipeChicken.setDescription("Chicken");
-
-
 
         Notes notesChicken = new Notes();
         notesChicken.setRecipeNotes("Some notes 2");
@@ -126,6 +120,10 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         recipeChicken.getCategories().add(categoryAmerican);
 
 
+        ingredientRepository.save(ingredientAvocado);
+        ingredientRepository.save(ingredientChicken);
+        ingredientRepository.save(ingredientLemon);
+        ingredientRepository.save(ingredientLemon2);
 
         recipeRepository.save(recipeGuacomole);
         recipeRepository.save(recipeChicken);

@@ -45,9 +45,10 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    public void addIngredient (Ingredient ingredient) {
+    public Recipe addIngredient (Ingredient ingredient) {
         ingredients.add(ingredient);
         ingredient.setRecipe(this);
+        return this;
     }
 
     @Lob
