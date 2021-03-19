@@ -74,7 +74,7 @@ public class IndexControllerTest {
 
 
         //then
-        assertEquals(viewName, "index");
+        assertEquals(viewName, "index123");
         //проверил бы, что в model записан нужный set в attribute, но пока не вижу методов get в ней
 
         verify(recipeMappedService, times(1)).getRecipes();
