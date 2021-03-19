@@ -35,7 +35,7 @@ public class UnitOfMeasureRepositoryTest {
 
         Optional<UnitOfMeasure> resOpt = unitOfMeasureRepository.findByDescription("SomeMeasure");
 
-        assertEquals(resOpt.get().getDescription(), "SomeMeasure");
+        assertEquals(resOpt.get().getDescription(), "SomeMeasure123");
     }
 
     @Test
