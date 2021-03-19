@@ -14,7 +14,7 @@ class IngredientTest {
     @Test
     void getId() throws Exception {
         Long id = 5l;
-        ingredient.setId (id+10l);
+        ingredient.setId (id);
         assertEquals(ingredient.getId(), id);
     }
 }
