@@ -1,6 +1,7 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.exceptions.MyNumberFormatException;
 import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,11 @@ public class RecipeController {
     @GetMapping("/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model){
 
-        model.addAttribute("recipe", recipeService.findById(new Long(id)));
+        try {
+            model.addAttribute("recipe", recipeService.findById(Long.parseLong(id)));
+        } catch (NumberFormatException exception) {
+            throw new MyNumberFormatException ( exception.getMessage() + "in RecipeController.showById id = " + id);
+        }
 
         return "recipe/show";
     }
@@ -58,6 +63,20 @@ public class RecipeController {
 
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MyNumberFormatException.class)
+    public ModelAndView handleBadNumberFormat (Exception exception) {
+        log.error ("Handling bad number format exception");
+        log.error (exception.getMessage());
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("400error");
+        modelAndView.addObject("exception", exception);
+
+        return modelAndView;
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

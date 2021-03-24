@@ -54,6 +54,22 @@ public class RecipeControllerTest {
     }
 
     @Test
+    public void testShowRecipeByIdIdNotNumber() throws Exception {
+
+
+        //given
+        String badId = "asd";
+
+        //when+then
+        mockMvc.perform(get("/recipe/"+ badId + "/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
+
+//        verifyZeroInteractions(recipeService.findById(any()));
+    }
+
+
+    @Test
     public void testGetRecipeNotFound() throws Exception {
 
         when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
