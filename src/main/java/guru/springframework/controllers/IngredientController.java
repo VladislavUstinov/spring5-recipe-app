@@ -68,6 +68,7 @@ public class IngredientController {
         return "recipe/ingredient/ingredientform";
     }
 
+    //here "update" is in fact only findByIdAndAddAttributeToModel
     @GetMapping
     @RequestMapping("recipe/{recipeId}/ingredient/{id}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId,
@@ -76,6 +77,17 @@ public class IngredientController {
 
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         return "recipe/ingredient/ingredientform";
+    }
+
+    @GetMapping
+    @RequestMapping("recipe/{recipeId}/ingredient/{id}/delete")
+    public String deleteRecipeIngredient(@PathVariable String recipeId,
+                                         @PathVariable String id, Model model){
+
+        ingredientService.deleteByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id));
+
+        //в redirect будет сделан новый запрос, так что модель будет передана уже в нем:
+        return "redirect:/recipe/" + recipeId + "/ingredients";
     }
 
     @PostMapping("recipe/{recipeId}/ingredient")
